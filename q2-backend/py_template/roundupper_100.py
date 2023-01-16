@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from enum import Enum
 from json import dumps
+from math import sqrt
 from typing import Union, NamedTuple, List
 from flask import Flask, request
 
@@ -75,16 +76,37 @@ def create_entity():
 def lassoable():
     # TODO: implement me
     ...
-    name = str(request.args.get("name"))
+    name = str(request.args.get("cowboy_name"))
+    # get specified space cowboy
+
+    loc_x = 0
+    loc_y = 0
+    lasso_length = 0
+
     for entity in space_database:
+        data = entity['metadata']
+        if (isinstance(data, SpaceAnimal)):
+            if (data['name'] == name):
+                location = entity['location']
+                loc_x = location['x']
+                loc_y = location['y']
+                lasso_length = data['lasso_length']
+                break
 
     animals = []
 
     for entity in space_database:
-        if (isinstance(entity['metadata'], SpaceAnimal)):
+        data = entity['metadata']
+        if (isinstance(data, SpaceAnimal)):
+            location = entity['location']
+            x_diff = location['x'] - loc_x
+            y_diff = location['y'] - loc_y
+            # use pytha to get distance
+            if (sqrt(pow(x_diff, 2) + pow(y_diff, 2)) <= lasso_length):
+                animals.append(entity)
 
     return dumps({
-        'space_animals':})
+        'space_animals': animals})
 
 
 # DO NOT TOUCH ME, thanks :D
