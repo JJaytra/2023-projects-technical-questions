@@ -84,26 +84,30 @@ def lassoable():
     lasso_length = 0
 
     for entity in space_database:
-        data = entity['metadata']
-        if (isinstance(data, SpaceAnimal)):
-            if (data['name'] == name):
-                location = entity['location']
+        data = entity.metadata
+        if (isinstance(data, SpaceCowboy)):
+            if (data.name == name):
+                location = entity.location
                 loc_x = location['x']
                 loc_y = location['y']
-                lasso_length = data['lasso_length']
+                lasso_length = data.lassoLength
                 break
 
     animals = []
 
     for entity in space_database:
-        data = entity['metadata']
+        data = entity.metadata
         if (isinstance(data, SpaceAnimal)):
-            location = entity['location']
+            location = entity.location
             x_diff = location['x'] - loc_x
             y_diff = location['y'] - loc_y
-            # use pytha to get distance
+            # use pythag to get distance
             if (sqrt(pow(x_diff, 2) + pow(y_diff, 2)) <= lasso_length):
-                animals.append(entity)
+                animal = {
+                    'type': data.type,
+                    'location': location
+                }
+                animals.append(animal)
 
     return dumps({
         'space_animals': animals})
