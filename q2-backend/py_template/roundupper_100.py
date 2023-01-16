@@ -1,9 +1,10 @@
 from dataclasses import dataclass
 from enum import Enum
+from json import dumps
 from typing import Union, NamedTuple, List
 from flask import Flask, request
 
-from entity import create_entity_v1
+# from entity import create_entity_v1
 
 # SpaceCowboy models a cowboy in our super amazing system
 
@@ -51,11 +52,22 @@ def create_entity():
     # TODO: implement me
     info = request.get_json()
     # get information from json package
-    type = info['type']
-    location = info['location']
-    metadata = info['metadata']
+    entities = info['entities']
+    for entity in entities:
+        type = entity['type']
+        location = entity['location']
+        metadata = entity['metadata']
+    # create_entity_v1(type, location, metadata)
+        if (type == 'space_cowboy'):
+            entity_meta = SpaceCowboy(
+                metadata['name'], metadata['lassoLength'])
+        elif (type == 'space_animal'):
+            entity_meta = SpaceAnimal(metadata['type'])
 
-    create_entity_v1(type, location, metadata)
+        new_entity = SpaceEntity(entity_meta, location)
+
+        space_database.append(new_entity)
+    return dumps({})
 
 
 # lasooable returns all the space animals a space cowboy can lasso given their name
@@ -63,6 +75,16 @@ def create_entity():
 def lassoable():
     # TODO: implement me
     ...
+    name = str(request.args.get("name"))
+    for entity in space_database:
+
+    animals = []
+
+    for entity in space_database:
+        if (isinstance(entity['metadata'], SpaceAnimal)):
+
+    return dumps({
+        'space_animals':})
 
 
 # DO NOT TOUCH ME, thanks :D
